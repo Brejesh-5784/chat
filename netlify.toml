@@ -5,8 +5,8 @@
   # Build the frontend
   base = "new-project/frontend"
   command = "npm install && npm run build"
-  publish = "new-project/frontend/dist"
-  functions = "new-project/backend/netlify/functions"
+  publish = "dist"
+  functions = "../backend/netlify/functions"
 
 # Environment variables (set these in Netlify Dashboard)
 # GROQ_API_KEY = "your_groq_api_key_here"
