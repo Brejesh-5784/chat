@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.py[cod]
+*$py.class
+venv/
+env/
+ENV/
+.venv
+
+# Environment
+.env
+.env.local
+.envrc
+
+# Build
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python
+*.so
+*.log
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Misc
+.abstra/
+.ruff_cache/
