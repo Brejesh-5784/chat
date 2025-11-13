@@ -15,6 +15,16 @@ import json
 import re
 from datetime import datetime, timedelta
 
+# Load environment variables for local development
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+    print("✅ Environment variables loaded from .env")
+except ImportError:
+    print("⚠️  python-dotenv not installed, using system environment variables")
+except Exception as e:
+    print(f"⚠️  Error loading .env: {str(e)}")
+
 # Lazy import for Groq to avoid initialization issues
 _groq_client = None
 
@@ -24,12 +34,16 @@ def get_groq_client():
     if _groq_client is None:
         try:
             from groq import Groq
-            api_key = os.environ.get("GROQ_API_KEY")
+            api_key = os.environ.get("GROQ_API_KEY") or os.getenv("GROQ_API_KEY")
             if not api_key:
+                print("❌ GROQ_API_KEY not found in environment")
+                print(f"Available env vars: {list(os.environ.keys())}")
                 raise ValueError("GROQ_API_KEY not found in environment")
+            print(f"✅ GROQ_API_KEY found (length: {len(api_key)})")
             _groq_client = Groq(api_key=api_key)
+            print("✅ Groq client initialized successfully")
         except Exception as e:
-            print(f"Error initializing Groq client: {str(e)}")
+            print(f"❌ Error initializing Groq client: {str(e)}")
             raise
     return _groq_client
 
@@ -105,6 +119,18 @@ def root():
             "generate_plan": "/api/generate-plan",
             "update_task": "/api/projects/{project_id}/tasks/{task_id}"
         }
+    }
+
+@app.get("/api/debug")
+def debug():
+    """Debug endpoint to check environment"""
+    import sys
+    return {
+        "status": "ok",
+        "python_version": sys.version,
+        "groq_api_key_set": bool(os.environ.get("GROQ_API_KEY")),
+        "groq_api_key_length": len(os.environ.get("GROQ_API_KEY", "")),
+        "environment_vars": list(os.environ.keys())
     }
 
 
